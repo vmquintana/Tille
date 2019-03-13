@@ -1,0 +1,1403 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TilleWPF"
+        xmlns:domain ="clr-namespace:TilleWPF.Domain"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="TilleWPF.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="506" Width="1072.258"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}" WindowState="Maximized" Loaded="Window_Loaded">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Card.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.CheckBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Popupbox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DataGrid.ComboBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Shadows.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DialogHost.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Slider.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </Window.Resources>
+
+    <Grid>
+        <materialDesign:DialogHost Name="mainDialogHost" Identifier="mainDialog">
+            <DockPanel Grid.ColumnSpan="2">
+                <Menu DockPanel.Dock="Top" Height="35">
+                <MenuItem Header="_File">
+                    <MenuItem Header="Save">
+                        <MenuItem.Icon>
+                            <materialDesign:PackIcon Kind="ContentSave" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Save As.." />
+                    <MenuItem Header="Exit" InputGestureText="Ctrl+E">
+                        <MenuItem.Icon>
+                            <materialDesign:PackIcon Kind="ExitToApp" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Header="Excellent" IsCheckable="True" IsChecked="True" />
+                    <MenuItem Header="Rubbish" IsCheckable="True" />
+                    <MenuItem Header="Dig Deeper" InputGestureText="Ctrl+D">
+                        <MenuItem Header="Enlightenment?" IsCheckable="True" />
+                        <MenuItem Header="Disappointment" IsCheckable="True" />
+                    </MenuItem>
+                    <MenuItem Header="Look Deeper" InputGestureText="Ctrl+D">
+                        <MenuItem Header="Plain" />
+                        <MenuItem Header="Ice Cream" />
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="_Edit">
+                    <MenuItem Header="_Cut" Command="Cut">
+                        <MenuItem.Icon>
+                            <materialDesign:PackIcon Kind="ContentCut" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="_Copy" Command="Copy">
+                        <MenuItem.Icon>
+                            <materialDesign:PackIcon Kind="ContentCopy" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="_Paste" Command="Paste">
+                        <MenuItem.Icon>
+                            <materialDesign:PackIcon Kind="ContentPaste" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+            </Menu>
+                <ToolBarTray DockPanel.Dock="Top" Height="35">
+                    <ToolBar Height="35">
+                        <Button Style="{DynamicResource MaterialDesignFlatButton}" 
+                                HorizontalAlignment="Right"
+                                x:Name="refreshButton"
+                                Click="Refresh">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Refresh" />
+                                <TextBlock Margin="2 0 0 0" VerticalAlignment="Center"><Run Text="Actualizar"/></TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{DynamicResource MaterialDesignFlatButton}" 
+                                HorizontalAlignment="Right"
+                                x:Name="FindButton"
+                                Click="Search">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Calendar" />
+                                <TextBlock Margin="02 0 0 0" VerticalAlignment="Center"><Run Text="Buscar"/></TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button  Content="Nuevo Gasto" Height="35" Padding="16,0" Style="{DynamicResource MaterialDesignRaisedDarkButton}" />
+                        <Button  Content="Open" VerticalAlignment="Center" Height="35" Padding="16,0" Grid.IsSharedSizeScope="True" />
+                        <Button  Content="Save" Height="35" Padding="16,0" Grid.IsSharedSizeScope="True" />
+                        <Separator Grid.Column="1" />
+                        <Button Content="Icons" Height="35" Padding="16,0" Grid.IsSharedSizeScope="True" />
+                        <Button Content="Copy" ToolTip="Copy selection to Windows Clipboard." Height="35" Padding="16,0" Grid.IsSharedSizeScope="True"/>
+                        <Button ToolTip="Paste from Windows Clipboard." Height="35" Padding="16,0" Grid.IsSharedSizeScope="True">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="3,0,0,0"><Run Text="Paste"/></TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Separator Grid.Column="1" />
+                        <Button Style="{DynamicResource MaterialDesignFlatButton}" HorizontalAlignment="Right" ToolTip="Nuevo desayuno." Click="RestaurantModal">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Restaurant" />
+                                <TextBlock Margin="4 0 0 0" VerticalAlignment="Center"><Run Text="Desayuno"/></TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{DynamicResource MaterialDesignFlatButton}" HorizontalAlignment="Right" ToolTip="Nuevo taxi.">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Taxi" />
+                                <TextBlock Margin="4 0 0 0" VerticalAlignment="Center"><Run Text="Taxi"/></TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{DynamicResource MaterialDesignFlatButton}" HorizontalAlignment="Right" ToolTip="Nueva Limpieza.">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Broom" />
+                                <TextBlock Margin="4 0 0 0" VerticalAlignment="Center"><Run Text="Limpieza"/></TextBlock>
+                            </StackPanel>
+                        </Button>
+
+                    </ToolBar>
+                </ToolBarTray>
+                <StatusBar DockPanel.Dock="Bottom">
+                    <StatusBar.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="100" />
+                                </Grid.ColumnDefinitions>
+                            </Grid>
+                        </ItemsPanelTemplate>
+                    </StatusBar.ItemsPanel>
+                    <StatusBarItem>
+                        <TextBlock x:Name="lblCursorPosition" Text="Gastos: $781"/>
+                    </StatusBarItem>
+                    <Separator Grid.Column="1" />
+                    <StatusBarItem Grid.Column="2">
+                        <TextBlock Text="Ganancias: $1781 (Neta:$1000)" />
+                    </StatusBarItem>
+                    <Separator Grid.Column="3" />
+                    <StatusBarItem Grid.Column="4">
+                        <ProgressBar Value="93"  Width="90" Height="16" />
+                    </StatusBarItem>
+                </StatusBar>
+                <StackPanel >
+                    <GroupBox  Header="Navegador" Style="{DynamicResource MaterialDesignCardGroupBox}"  Margin="7 5 5 0 ">
+                        <GroupBox.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Apps"  VerticalAlignment="Center" />
+                                    <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="{Binding}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GroupBox.HeaderTemplate>
+                        <StackPanel >
+                            <Button Style="{DynamicResource MaterialDesignRaisedDarkButton}" 
+                                    HorizontalAlignment="Left" Margin="0 3 0 3" 
+                                    Click="MenuItem_Click_Statistics" Name="ButtonStats">
+                                <StackPanel Orientation="Horizontal" Width="115">
+                                    <materialDesign:PackIcon Kind="Assessment" Width="20" Height="20"/>
+                                    <TextBlock Margin="6 0 0 0" VerticalAlignment="Center" FontSize="16" FontWeight="Normal"><Run Text="Estadísticas"/></TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{DynamicResource MaterialDesignFlatButton}" 
+                                    HorizontalAlignment="Left" Margin="0 3 0 3"
+                                    Click="MenuItem_Warehouse" Name="ButtonWarehouse">
+                                <StackPanel Orientation="Horizontal" Width="115">
+                                    <materialDesign:PackIcon Kind="StoreMallDirectory" Width="20" Height="20"/>
+                                    <TextBlock Margin="6 0 0 0" VerticalAlignment="Center" FontSize="16" FontWeight="Normal"><Run Text="Almacén"/></TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{DynamicResource MaterialDesignFlatButton}" 
+                                    HorizontalAlignment="Left" Margin="0 3 0 3"
+                                    Click="MenuItem_Click_Book" Name="ButtonBook">
+                                <StackPanel Orientation="Horizontal" Width="115">
+                                    <materialDesign:PackIcon Kind="Notebook" Width="20" Height="20"/>
+                                    <TextBlock Margin="6 0 0 0" VerticalAlignment="Center" FontSize="16" FontWeight="Normal"><Run Text="Libro"/></TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{DynamicResource MaterialDesignFlatButton}" 
+                                    HorizontalAlignment="Left" Margin="0 3 0 3"
+                                    Click="MenuItem_Click_Services" Name="ButtonServices">
+                                <StackPanel Orientation="Horizontal" Width="115">
+                                    <materialDesign:PackIcon Kind="Style" Width="20" Height="20"/>
+                                    <TextBlock Margin="6 0 0 0" VerticalAlignment="Center" FontSize="16" FontWeight="Normal"><Run Text="Servicios"/></TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </GroupBox>
+                    
+                </StackPanel>
+                <!--Main-->
+                <DockPanel x:Name="MainDock">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel x:Name="statistics" Visibility="Visible" Grid.Column="0">
+                            <Grid Margin="18 10 5 5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <!--Card Header-->
+                                <StackPanel Grid.Row="0" Margin="10 5 5 0" HorizontalAlignment="Left">
+                                    <Grid>
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="5" Orientation="Horizontal">
+                                            <TextBlock FontWeight="Bold" FontSize="16" Padding="0 0 10 0"><Run Text="Estadísticas"/></TextBlock>
+                                            <TextBlock Name="monthYearCurrentStats" FontWeight="Light" FontSize="14"><Run Text="Abril/2019"/></TextBlock>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                                <!--Tables-->
+                                <Grid Grid.Row="1" Margin="7 0 7 7">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <materialDesign:DialogHost Grid.Column="0" Margin="10 4 10 4" DialogClosing="CloseDialog">
+                                        <StackPanel >
+                                            <!--Header-->
+                                            <Grid >
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                                    <TextBlock FontWeight="Bold" FontSize="14" ><Run Text="Gastos"/></TextBlock>
+                                                </StackPanel>
+                                                <!--Header with modal-->
+                                                <StackPanel  Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                                                    <Button Style="{StaticResource MaterialDesignToolButton}" 
+                                                        Width="30" Padding="2 0 2 0" 
+                                                        Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                                        materialDesign:RippleAssist.IsCentered="True" 
+                                                        ToolTip="Adicionar nuevo producto">
+                                                        <Button.CommandParameter>
+                                                            <StackPanel Margin="16" x:Name="AddExpensesDialog">
+                                                                <TextBlock FontWeight="Bold" FontSize="15"><Run Text="Nuevo gasto"/></TextBlock>
+                                                                <Grid x:Name="GridInputExpenses" Margin="10">
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="150"/>
+                                                                        <ColumnDefinition Width="10"/>
+                                                                        <ColumnDefinition Width="150"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Grid.RowDefinitions>
+                                                                        <RowDefinition/>
+                                                                        <RowDefinition/>
+                                                                        <RowDefinition/>
+                                                                    </Grid.RowDefinitions>
+
+                                                                    <ComboBox x:Name="expenseType"
+                                                                              Grid.Column="0" Grid.Row="0" Margin="3" IsEnabled="False">
+                                                                        <ComboBoxItem Content="Clean"/>
+                                                                        <ComboBoxItem Content="Taxi"/>
+                                                                        <ComboBoxItem Content="Breakfast"/>
+                                                                        <ComboBoxItem Content="Book"/>
+                                                                        <ComboBoxItem Content="Warehouse"/>
+                                                                        <ComboBoxItem IsSelected="True" Content="Other"/>
+                                                                    </ComboBox>
+
+                                                                    <DatePicker x:Name="expenseDate"
+                                                                                materialDesign:HintAssist.Hint="Pick Date" 
+                                                                                materialDesign:HintAssist.HintOpacity="1"
+                                                                                Grid.Column="2" Grid.Row="0" Margin="3"                                                                                
+                                                                                Style="{StaticResource MaterialDesignFloatingHintDatePicker}" 
+                                                                                SelectedDateChanged="SelectedDateChanged">
+                                                                        <DatePicker.Text>
+                                                                            <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                                <Binding.ValidationRules>
+                                                                                    <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                                </Binding.ValidationRules>
+                                                                            </Binding>
+                                                                        </DatePicker.Text>
+                                                                    </DatePicker>
+
+                                                                    <TextBox x:Name="expensePrice"
+                                                                                 PreviewTextInput="NumberValidationTextBox"
+                                                                                 materialDesign:HintAssist.Hint="Monto($)" 
+                                                                                 materialDesign:HintAssist.HintOpacity="1"
+                                                                                 TextChanged="TextChanged"
+                                                                                 Grid.Column="0" Grid.Row="1" Margin="3"
+                                                                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                                                                        <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                            <Binding.ValidationRules>
+                                                                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                                <domain:NumberFloatValidation ValidatesOnTargetUpdated="True"/>
+                                                                            </Binding.ValidationRules>
+                                                                        </Binding>
+                                                                    </TextBox>
+
+                                                                    <TextBox x:Name="expenseDescription"
+                                                                             TextWrapping="Wrap" VerticalAlignment="Stretch"
+                                                                             Grid.ColumnSpan="3" Grid.Row="3" Margin="3"
+                                                                             TextChanged="TextChanged"
+                                                                             MinWidth="280"
+                                                                             VerticalScrollBarVisibility="Auto"
+                                                                             SpellCheck.IsEnabled="True"
+                                                                             materialDesign:HintAssist.Hint="Multiline text"
+                                                                             materialDesign:HintAssist.HintOpacity="1"
+                                                                             Height="50">
+                                                                        <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                            <Binding.ValidationRules>
+                                                                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                            </Binding.ValidationRules>
+                                                                        </Binding>
+                                                                    </TextBox>
+
+                                                                </Grid>
+                                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                                            IsDefault="True"
+                                                                            Margin="0"
+                                                                            Command="materialDesign:DialogHost.CloseDialogCommand"
+                                                                            Click="AddExpenseMovement" Content="Aceptar"/>
+                                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                                            IsCancel="True"
+                                                                            Margin="8"
+                                                                            Command="materialDesign:DialogHost.CloseDialogCommand" Content="Cancelar"/>
+                                                                </StackPanel>
+                                                            </StackPanel>
+                                                        </Button.CommandParameter>
+                                                        <materialDesign:PackIcon Kind="Add" />
+                                                    </Button>
+                                                    <materialDesign:PopupBox Style="{StaticResource MaterialDesignToolPopupBox}" Padding="2 0 2 0">
+                                                        <StackPanel>
+                                                            <Button  Content="Mostrar descripciones" Click="ShowDescriptionExpenses"/>
+                                                            <Button  Content="Mostrar acciones" Click="ShowActionsExpenses"/>
+                                                        </StackPanel>
+                                                    </materialDesign:PopupBox>
+                                                </StackPanel>
+                                            </Grid>
+                                            <!--Table-->
+                                            <DataGrid AutoGenerateColumns="False"  
+                                                      MaxHeight="380" MaxWidth="380"
+                                                      x:Name="dataGridExpenses" VerticalAlignment="Top" 
+                                                      Focusable="False" CanUserAddRows="False" 
+                                                      CanUserDeleteRows="False" CanUserReorderColumns="False">
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn Binding="{Binding Type}" MinWidth="50"  Header="Acción" IsReadOnly="True"/>
+                                                    <DataGridTextColumn Binding="{Binding Description}" MinWidth="96"  Header="Descripción" IsReadOnly="True" Visibility="Hidden"/>
+                                                    <DataGridTextColumn Binding="{Binding Date}" MinWidth="50"  Header="Fecha" IsReadOnly="True"/>
+                                                    <DataGridTextColumn Binding="{Binding Cost, StringFormat=\{0:C\}}" MinWidth="50"  Header="Costo" IsReadOnly="True" />
+                                                    <DataGridTemplateColumn Visibility="Hidden">
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"  Width="35" Margin="0" Padding="0"              
+                                                                        Content="{materialDesign:PackIcon Edit}" ToolTip="Editar"/>
+                                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"  Width="35" Margin="0" Padding="0"                  
+                                                                        Content="{materialDesign:PackIcon Delete}" ToolTip="Eliminar"/>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                    </DataGridTemplateColumn>
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                            <!--Table Footer-->
+                                            <DataGrid x:Name="datagridFooterExpenses" MaxWidth="380">
+                                                <DataGrid.Columns >
+                                                    <DataGridTextColumn MinWidth="50"/>
+                                                    <DataGridTextColumn MinWidth="50" Header="Total"/>
+                                                    <DataGridTextColumn MinWidth="50"/>
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                        </StackPanel>
+                                    </materialDesign:DialogHost>
+                                    <materialDesign:DialogHost Grid.Column="1" Margin="4 4 10 4" DialogClosing="CloseDialog">
+                                        <StackPanel >
+                                            <!--Header-->
+                                            <Grid >
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                                    <TextBlock FontWeight="Bold" FontSize="14"><Run Text="Ganancias"/></TextBlock>
+                                                </StackPanel>
+                                                <!--Header with modal-->
+                                                <StackPanel  Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                                                    <Button Style="{StaticResource MaterialDesignToolButton}" 
+                                                            Width="30" Padding="2 0 2 0"
+                                                            materialDesign:RippleAssist.IsCentered="True" 
+                                                            ToolTip="Adicionar nuevo producto"
+                                                            Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}">
+                                                        <Button.CommandParameter>
+                                                            <StackPanel Margin="16" x:Name="AddProfitDialog">
+                                                                <TextBlock FontWeight="Bold" FontSize="15"><Run Text="Nuevo ganancia"/></TextBlock>
+                                                                <Grid x:Name="GridInputProfit" Margin="10">
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="150"/>
+                                                                        <ColumnDefinition Width="10"/>
+                                                                        <ColumnDefinition Width="150"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Grid.RowDefinitions>
+                                                                        <RowDefinition/>
+                                                                        <RowDefinition/>
+                                                                        <RowDefinition/>
+                                                                    </Grid.RowDefinitions>
+
+                                                                    <ComboBox x:Name="profitType"
+                                                                              Grid.Column="0" Grid.Row="0" Margin="3" IsEnabled="False">
+                                                                        <ComboBoxItem Content="Clean"/>
+                                                                        <ComboBoxItem Content="Taxi"/>
+                                                                        <ComboBoxItem Content="Breakfast"/>
+                                                                        <ComboBoxItem Content="Book"/>
+                                                                        <ComboBoxItem Content="Warehouse"/>
+                                                                        <ComboBoxItem IsSelected="True" Content="Other"/>
+                                                                    </ComboBox>
+
+                                                                    <DatePicker x:Name="profitDate"
+                                                                                materialDesign:HintAssist.Hint="Pick Date" 
+                                                                                materialDesign:HintAssist.HintOpacity="1"
+                                                                                Grid.Column="2" Grid.Row="0" Margin="3"                                                                                
+                                                                                Style="{StaticResource MaterialDesignFloatingHintDatePicker}" 
+                                                                                SelectedDateChanged="SelectedDateChanged">
+                                                                        <DatePicker.Text>
+                                                                            <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                                <Binding.ValidationRules>
+                                                                                    <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                                </Binding.ValidationRules>
+                                                                            </Binding>
+                                                                        </DatePicker.Text>
+                                                                    </DatePicker>
+
+                                                                    <TextBox x:Name="profitPrice"
+                                                                                 PreviewTextInput="NumberValidationTextBox"
+                                                                                 materialDesign:HintAssist.Hint="Monto($)" 
+                                                                                 materialDesign:HintAssist.HintOpacity="1"
+                                                                                 TextChanged="TextChanged"
+                                                                                 Grid.Column="0" Grid.Row="1" Margin="3"
+                                                                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                                                                        <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                            <Binding.ValidationRules>
+                                                                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                                <domain:NumberFloatValidation ValidatesOnTargetUpdated="True" />
+                                                                            </Binding.ValidationRules>
+                                                                        </Binding>
+                                                                    </TextBox>
+
+                                                                    <TextBox x:Name="profitDescription"
+                                                                             TextWrapping="Wrap" VerticalAlignment="Stretch"
+                                                                             Grid.ColumnSpan="3" Grid.Row="3" Margin="3"
+                                                                             TextChanged="TextChanged"
+                                                                             MinWidth="280"
+                                                                             VerticalScrollBarVisibility="Auto"
+                                                                             SpellCheck.IsEnabled="True"
+                                                                             materialDesign:HintAssist.Hint="Multiline text"
+                                                                             materialDesign:HintAssist.HintOpacity="1"
+                                                                             Height="50">
+                                                                        <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                            <Binding.ValidationRules>
+                                                                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                            </Binding.ValidationRules>
+                                                                        </Binding>
+                                                                    </TextBox>
+
+                                                                </Grid>
+                                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                                            IsDefault="True"
+                                                                            Margin="0"
+                                                                            Command="materialDesign:DialogHost.CloseDialogCommand"
+                                                                            Click="AddProfitMovement" Content="Aceptar"/>
+                                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                                            IsCancel="True"
+                                                                            Margin="8"
+                                                                            Command="materialDesign:DialogHost.CloseDialogCommand" Content="Cancelar"/>
+                                                                </StackPanel>
+                                                            </StackPanel>
+                                                        </Button.CommandParameter>
+                                                        <materialDesign:PackIcon Kind="Add" />
+                                                    </Button>
+                                                    <materialDesign:PopupBox Style="{StaticResource MaterialDesignToolPopupBox}" Padding="2 0 2 0">
+                                                        <StackPanel>
+                                                            <Button Content="Mostrar descripción" Click="ShowDescriptionProfits"/>
+                                                            <Button Content="Mostrar acciones" Click="ShowActionsProfit"/>
+                                                        </StackPanel>
+                                                    </materialDesign:PopupBox>
+                                                </StackPanel>
+                                            </Grid>
+                                            <!--Table-->
+                                            <DataGrid AutoGenerateColumns="False" 
+                                                      MaxHeight="380" MaxWidth="380"
+                                                  x:Name="dataGridProfits" 
+                                                  VerticalAlignment="Top" 
+                                                  Focusable="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn Binding="{Binding Type}" MinWidth="50"  Header="Acción" IsReadOnly="True"/>
+                                                    <DataGridTextColumn Binding="{Binding Description}" MinWidth="96"  Header="Descripción" IsReadOnly="True" Visibility="Hidden"/>
+                                                    <DataGridTextColumn Binding="{Binding Date}" MinWidth="50"  Header="Fecha" IsReadOnly="True"/>
+                                                    <DataGridTextColumn Binding="{Binding Cost, StringFormat=\{0:C\}}" MinWidth="50"  Header="Monto" IsReadOnly="True"/>
+                                                    <DataGridTemplateColumn Visibility="Hidden">
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"  Width="35" Margin="0" Padding="0"              
+                                                                        Content="{materialDesign:PackIcon Edit}" ToolTip="Editar"/>
+                                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"  Width="35" Margin="0" Padding="0"                  
+                                                                        Content="{materialDesign:PackIcon Delete}" ToolTip="Eliminar"/>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                    </DataGridTemplateColumn>
+                                                </DataGrid.Columns>
+
+                                            </DataGrid>
+                                            <!--Table Footer-->
+                                            <DataGrid Grid.Row="2" x:Name="datagridFooterProfits" MaxWidth="380">
+                                                <DataGrid.Columns >
+                                                    <DataGridTextColumn MinWidth="50"/>
+                                                    <DataGridTextColumn MinWidth="50" Header="Total"/>
+                                                    <DataGridTextColumn MinWidth="50"/>
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                        </StackPanel>
+                                    </materialDesign:DialogHost>
+                                    <StackPanel Grid.Column="2" Margin="4 4 10 4">
+                                        <!--Header-->
+                                        <Grid Height="32" MinWidth="200">
+                                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                                <TextBlock FontWeight="Bold" FontSize="14" Padding="2 0 2 0"><Run Text="Resumen"/></TextBlock>
+                                            </StackPanel>
+                                        </Grid>
+                                        <!--Table-->
+                                        <DataGrid AutoGenerateColumns="False" 
+                                                  x:Name="dataGridStats" 
+                                                  VerticalAlignment="Top" 
+                                                  Focusable="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Binding="{Binding Action}" MinWidth="116"  Header="Acción" IsReadOnly="True"/>
+                                                <DataGridTextColumn Binding="{Binding Total, StringFormat=\{0:C\}}" MinWidth="50"  Header="Total" IsReadOnly="True"/>
+                                            </DataGrid.Columns>
+
+                                        </DataGrid>
+                                        <!--Table Footer-->
+                                        <DataGrid Grid.Row="2" x:Name="datagridFooterStats">
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn MinWidth="116" Header="Ganancia(Neta)"/>
+                                                <DataGridTextColumn MinWidth="50"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+                        </StackPanel>
+                        <StackPanel x:Name="warehouse" Visibility="Hidden" Grid.Column="0">
+                            <!-- <materialDesign:Card Margin="10 5 5 5" MaxWidth="500" x:Name="Modal">-->
+                            <materialDesign:DialogHost DialogClosing="CloseDialog">
+                                <Grid Margin="18 10 5 5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                        <!--Card Header-->
+                                    <StackPanel Grid.Row="0" Margin="10 8 10 10">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0" VerticalAlignment="Center" Orientation="Horizontal">
+                                                <TextBlock FontWeight="Bold" FontSize="16" Padding="0 0 10 0"><Run Text="Almacén"/></TextBlock>
+                                                <TextBlock Name="monthYearCurrentWarehouse" FontWeight="Light" FontSize="14"><Run Text="Abril/2019"/></TextBlock>
+                                            </StackPanel>
+                                            <StackPanel  Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                                                <Button Style="{StaticResource MaterialDesignToolButton}" 
+                                                    Width="30" Padding="2 0 2 0"
+                                                    materialDesign:RippleAssist.IsCentered="True" 
+                                                    Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                                    ToolTip="Compra de producto">
+                                                    <Button.CommandParameter>
+                                                        <StackPanel Margin="16">
+                                                            <TextBlock FontWeight="Bold" FontSize="15"><Run Text="Nueva compra"/></TextBlock>
+                                                            <CheckBox Checked="CheckBox_NewProduct_Checked" 
+                                                                      Unchecked="CheckBox_NewProduct_Unchecked"
+                                                                      x:Name="checkBoxNewProduct" Content="Nuevo producto"/>
+                                                            <Grid Margin="10">
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="150"/>
+                                                                    <ColumnDefinition Width="10"/>
+                                                                    <ColumnDefinition Width="150"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition/>
+                                                                    <RowDefinition/>
+                                                                </Grid.RowDefinitions>
+
+                                                                <ComboBox x:Name="ComboBoxProducts" 
+                                                                          Grid.Column="0" Grid.Row="0" Margin="3" Visibility="Visible"/>
+
+                                                                <TextBox x:Name="newProduct" 
+                                                                         materialDesign:HintAssist.Hint="Producto" Visibility="Hidden"
+                                                                         materialDesign:HintAssist.HintOpacity="1"
+                                                                         Grid.Column="0" Grid.Row="0" Margin="3"
+                                                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                                                         TextChanged="TextChanged">
+                                                                    <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                        <Binding.ValidationRules>
+                                                                            <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                        </Binding.ValidationRules>
+                                                                    </Binding>
+                                                                </TextBox>
+
+                                                                <TextBox x:Name="productAmount"
+                                                                             PreviewTextInput="NumberValidationIntegerTextBox"
+                                                                         materialDesign:HintAssist.Hint="Cantidad" 
+                                                                         materialDesign:HintAssist.HintOpacity="1"
+                                                                         Grid.Column="2" Grid.Row="0" Margin="3"
+                                                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                                                         TextChanged="TextChanged">
+                                                                    <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                        <Binding.ValidationRules>
+                                                                            <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                        </Binding.ValidationRules>
+                                                                    </Binding>
+                                                                </TextBox>
+
+                                                                <DatePicker materialDesign:HintAssist.Hint="Pick Date" 
+                                                                            x:Name="productDate"
+                                                                            materialDesign:HintAssist.HintOpacity="1"
+                                                                            Grid.Column="0" Grid.Row="1" Margin="3"
+                                                                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}" 
+                                                                            SelectedDateChanged="SelectedDateChanged">
+                                                                    <DatePicker.Text>
+                                                                        <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                            <Binding.ValidationRules>
+                                                                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                            </Binding.ValidationRules>
+                                                                        </Binding>
+                                                                    </DatePicker.Text>
+                                                                </DatePicker>
+
+                                                                <TextBox x:Name="productCost"
+                                                                             PreviewTextInput="NumberValidationTextBox"
+                                                                         materialDesign:HintAssist.Hint="Monto($)" 
+                                                                         materialDesign:HintAssist.HintOpacity="1"
+                                                                         Grid.Column="2" Grid.Row="1" Margin="3"
+                                                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                                                         TextChanged="TextChanged">
+                                                                    <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                        <Binding.ValidationRules>
+                                                                            <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                            <domain:NumberFloatValidation ValidatesOnTargetUpdated="True" />
+                                                                        </Binding.ValidationRules>
+                                                                    </Binding>
+                                                                </TextBox>
+
+                                                            </Grid>
+                                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                                                                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                                        IsDefault="True"
+                                                                        Margin="0"
+                                                                        Command="materialDesign:DialogHost.CloseDialogCommand"
+                                                                        Click="AddProductMovement" Content="Aceptar"/>
+                                                                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                                        IsCancel="True"
+                                                                        Margin="8"
+                                                                        Command="materialDesign:DialogHost.CloseDialogCommand" Content="Cancelar"/>
+                                                            </StackPanel>
+                                                        </StackPanel>
+                                                    </Button.CommandParameter>
+                                                    <materialDesign:PackIcon Kind="Add" />
+                                                </Button>
+                                                <Button Style="{StaticResource MaterialDesignToolButton}" 
+                                                    Width="30" Padding="2 0 2 0"
+                                                    materialDesign:RippleAssist.IsCentered="True"
+                                                    Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                                    ToolTip="Venta de producto">
+                                                    <Button.CommandParameter>
+                                                        <StackPanel Margin="16">
+                                                            <TextBlock FontWeight="Bold" FontSize="15"><Run Text="Nueva venta"/></TextBlock>
+                                                            <Grid Margin="10">
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="150"/>
+                                                                    <ColumnDefinition Width="10"/>
+                                                                    <ColumnDefinition Width="150"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition/>
+                                                                    <RowDefinition/>
+                                                                    <RowDefinition/>
+                                                                </Grid.RowDefinitions>
+                                                                <ComboBox x:Name="comboBoxSellProductName" 
+                                                                          Grid.Column="0" Grid.Row="0" Margin="3" SelectionChanged="ComboBoxProductName_SelectionChanged"/>
+
+                                                                <DatePicker materialDesign:HintAssist.Hint="Pick Date" 
+                                                                            x:Name="sellDate"
+                                                                            materialDesign:HintAssist.HintOpacity="1"
+                                                                            Grid.Column="2" Grid.Row="0" Margin="3"
+                                                                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}" 
+                                                                            SelectedDateChanged="SelectedDateChanged">
+                                                                    <DatePicker.Text>
+                                                                        <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                            <Binding.ValidationRules>
+                                                                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                            </Binding.ValidationRules>
+                                                                        </Binding>
+                                                                    </DatePicker.Text>
+                                                                </DatePicker>
+
+                                                                <TextBox materialDesign:HintAssist.Hint="Monto($)"
+                                                                             PreviewTextInput="NumberValidationTextBox"
+                                                                         x:Name="sellPrice"
+                                                                         materialDesign:HintAssist.HintOpacity="1"
+                                                                         Grid.Column="2" Grid.Row="1" Margin="3"
+                                                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                                                         TextChanged="TextChanged">
+                                                                    <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                        <Binding.ValidationRules>
+                                                                            <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                            <domain:NumberFloatValidation ValidatesOnTargetUpdated="True" />
+                                                                        </Binding.ValidationRules>
+                                                                    </Binding>
+                                                                </TextBox>
+                                                                <StackPanel Grid.Row="2" Grid.ColumnSpan="3">
+                                                                    <Grid>
+                                                                        <Grid.ColumnDefinitions>
+                                                                            <ColumnDefinition Width="44"></ColumnDefinition>
+                                                                            <ColumnDefinition ></ColumnDefinition>
+                                                                            <ColumnDefinition ></ColumnDefinition>
+                                                                        </Grid.ColumnDefinitions>
+                                                                        <Grid.RowDefinitions>
+                                                                            <RowDefinition></RowDefinition>
+                                                                            <RowDefinition></RowDefinition>
+                                                                        </Grid.RowDefinitions>
+                                                                        <TextBox Grid.Row="0" Grid.Column="0"
+                                                                                     PreviewTextInput="NumberValidationIntegerTextBox"
+                                                                                 materialDesign:HintAssist.Hint="Cantidad" 
+                                                                                 materialDesign:HintAssist.HintOpacity="1"
+                                                                                 Text="0"
+                                                                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                                                                                 TextChanged="TextBoxSlider_TextChanged">
+                                                                        </TextBox>
+                                                                        <Slider Name="sliderAmountSell" 
+                                                                                Style="{StaticResource MaterialDesignDiscreteSlider}" 
+                                                                                Grid.ColumnSpan="2"
+                                                                                Grid.Row="0" Grid.Column="1"
+                                                                                Orientation="Horizontal" 
+                                                                                Minimum="1" Maximum="35" Value="0" ValueChanged="SliderAmount_ValueChanged" />
+                                                                    </Grid>
+                                                                </StackPanel>
+
+                                                            </Grid>
+                                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                                                                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                                        IsDefault="True"
+                                                                        Margin="0"
+                                                                        Command="materialDesign:DialogHost.CloseDialogCommand"
+                                                                        Click="SellProductMovement" Content="Aceptar"/>
+                                                                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                                            IsCancel="True"
+                                                                            Margin="8"
+                                                                            Command="materialDesign:DialogHost.CloseDialogCommand" Content="Cancelar"/>
+                                                            </StackPanel>
+                                                        </StackPanel>
+                                                    </Button.CommandParameter>
+                                                    <materialDesign:PackIcon Kind="AddShoppingCart" />
+                                                </Button>
+                                                <materialDesign:PopupBox Style="{StaticResource MaterialDesignToolPopupBox}" Padding="2 0 2 0">
+                                                    <StackPanel>
+                                                        <Button Content="Mostar acciones" Click="ShowActionsWareHouse"/>
+                                                        <Button Content="Editar"/>
+                                                    </StackPanel>
+                                                </materialDesign:PopupBox>
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+                                    <Grid Grid.Row="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <!--Table-->
+                                        <DataGrid AutoGenerateColumns="False" 
+                                                  x:Name="dataGridWarehouse" 
+                                                  VerticalAlignment="Top" 
+                                                  MaxHeight="400"
+                                                  Grid.Row="0" Focusable="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn Binding="{Binding Name}" MinWidth="50"  Header="Producto" IsReadOnly="True" />
+                                                    <DataGridTextColumn Binding="{Binding Existence}" MinWidth="50"  Header="Existencia" IsReadOnly="True"/>
+                                                    <DataGridTextColumn Binding="{Binding AmountBoughtCurrentMonth}" MinWidth="50"  Header="Total" IsReadOnly="True"/>
+                                                    <DataGridTextColumn Binding="{Binding Cost, StringFormat=\{0:C\}}" MinWidth="50"  Header="Costo" IsReadOnly="True"/>
+                                                    <DataGridTemplateColumn Visibility="Hidden">
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"  Width="35" Margin="0" Padding="0"              
+                                                                            Content="{materialDesign:PackIcon Edit}" ToolTip="Editar"/>
+                                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"  Width="35" Margin="0" Padding="0"                  
+                                                                            Content="{materialDesign:PackIcon Delete}" ToolTip="Eliminar"/>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                    </DataGridTemplateColumn>
+                                            </DataGrid.Columns>
+
+                                            </DataGrid>
+                                        <!--Table Footer-->
+                                        <DataGrid Grid.Row="1" x:Name="datagridFooter">
+                                        <DataGrid.Columns >
+                                            <DataGridTextColumn MinWidth="50"/>
+                                            <DataGridTextColumn MinWidth="50" Header="Total"/>
+                                            <DataGridTextColumn MinWidth="50"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                    </Grid>
+                                </Grid>
+                            </materialDesign:DialogHost>
+                           <!-- </materialDesign:Card> -->
+                        </StackPanel>
+                        <StackPanel x:Name="book" Visibility="Hidden" Grid.Column="0">
+                          <!--  <materialDesign:Card Margin="5" MaxWidth="700">-->
+                                <materialDesign:DialogHost DialogClosing="CloseDialog">
+                                    <Grid Margin="18 10 5 5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                        <!--Card Header-->
+                                        <StackPanel Grid.Row="0" Margin="10 8 10 10" HorizontalAlignment="Left">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="500"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel Grid.Column="0" VerticalAlignment="Center" Orientation="Horizontal">
+                                                    <TextBlock FontWeight="Bold" FontSize="16" Padding="0 0 10 0"><Run Text="Libro"/></TextBlock>
+                                                    <TextBlock Name="monthYearCurrentBook" FontWeight="Light" FontSize="14"><Run Text="Abril/2019"/></TextBlock>
+                                                </StackPanel>
+                                                <StackPanel  Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                                                    <Button Style="{StaticResource MaterialDesignToolButton}" 
+                                                Width="30" Padding="2 0 2 0"
+                                                materialDesign:RippleAssist.IsCentered="True" 
+                                                ToolTip="Nuevo cliente"
+                                                Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}">
+                                                        <Button.CommandParameter>
+                                                            <StackPanel Margin="16">
+                                                                <TextBlock FontWeight="Bold" FontSize="15"><Run Text="Nuevo cliente"/></TextBlock>
+                                                                <Grid Margin="10">
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="150"/>
+                                                                        <ColumnDefinition Width="10"/>
+                                                                        <ColumnDefinition Width="150"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Grid.RowDefinitions>
+                                                                        <RowDefinition/>
+                                                                        <RowDefinition/>
+                                                                        <RowDefinition/>
+                                                                    </Grid.RowDefinitions>
+                                                                    <TextBox Name="bookClients"
+                                                                             PreviewTextInput="NumberValidationIntegerTextBox"
+                                                                         materialDesign:HintAssist.Hint="Clientes(#)" 
+                                                                             materialDesign:HintAssist.HintOpacity="1"
+                                                                             Grid.Column="0" Grid.Row="0" Margin="3"
+                                                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                                                          TextChanged="TextChanged">
+                                                                        <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                            <Binding.ValidationRules>
+                                                                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                            </Binding.ValidationRules>
+                                                                        </Binding>
+                                                                    </TextBox>
+
+                                                                    <TextBox Name="bookCountry" materialDesign:HintAssist.Hint="Pais" 
+                                                                             materialDesign:HintAssist.HintOpacity="1"
+                                                                             Grid.Column="2" Grid.Row="0" Margin="3"
+                                                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                                                          TextChanged="TextChanged">
+                                                                        <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                            <Binding.ValidationRules>
+                                                                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                            </Binding.ValidationRules>
+                                                                        </Binding>
+                                                                    </TextBox>
+
+                                                                    <DatePicker Name="bookDateIn" materialDesign:HintAssist.Hint="Fecha de entrada" 
+                                                                                materialDesign:HintAssist.HintOpacity="1"
+                                                                                Grid.Column="0" Grid.Row="1" Margin="3"
+                                                                                Style="{StaticResource MaterialDesignFloatingHintDatePicker}" 
+                                                                            SelectedDateChanged="SelectedDateChanged">
+                                                                        <DatePicker.Text>
+                                                                            <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                                <Binding.ValidationRules>
+                                                                                    <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                                </Binding.ValidationRules>
+                                                                            </Binding>
+                                                                        </DatePicker.Text>
+                                                                    </DatePicker>
+
+                                                                    <DatePicker Name="bookDateOut" materialDesign:HintAssist.Hint="Fecha de salida" 
+                                                                            materialDesign:HintAssist.HintOpacity="1"
+                                                                            Grid.Column="2" Grid.Row="1" Margin="3"
+                                                                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}" 
+                                                                            SelectedDateChanged="SelectedDateChanged">
+                                                                        <DatePicker.Text>
+                                                                            <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                                <Binding.ValidationRules>
+                                                                                    <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                                </Binding.ValidationRules>
+                                                                            </Binding>
+                                                                        </DatePicker.Text>
+                                                                    </DatePicker>
+
+                                                                    <TextBox Name="bookEstimatedPrice" 
+                                                                             PreviewTextInput="NumberValidationTextBox"
+                                                                             materialDesign:HintAssist.Hint="Precio(Estimado)" 
+                                                                             materialDesign:HintAssist.HintOpacity="1"
+                                                                             Grid.Column="0" Grid.Row="2" Margin="3"
+                                                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                                                          TextChanged="TextChanged">
+                                                                        <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                            <Binding.ValidationRules>
+                                                                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                                <domain:NumberFloatValidation ValidatesOnTargetUpdated="True" />
+                                                                            </Binding.ValidationRules>
+                                                                        </Binding>
+                                                                    </TextBox>
+
+                                                                    <TextBox Name="bookRealPrice" 
+                                                                             PreviewTextInput="NumberValidationTextBox"
+                                                                             materialDesign:HintAssist.Hint="Precio" 
+                                                                             materialDesign:HintAssist.HintOpacity="1"
+                                                                             Grid.Column="2" Grid.Row="2" Margin="3"
+                                                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                                                          TextChanged="TextChanged">
+                                                                        <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                            <Binding.ValidationRules>
+                                                                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                                <domain:NumberFloatValidation ValidatesOnTargetUpdated="True" />
+                                                                            </Binding.ValidationRules>
+                                                                        </Binding>
+                                                                    </TextBox>
+                                                                </Grid>
+                                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                                            IsDefault="True"
+                                                                            Margin="0"
+                                                                            Command="materialDesign:DialogHost.CloseDialogCommand"
+                                                                        Click="AddBookIn" Content="Aceptar"/>
+                                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                                            IsCancel="True"
+                                                                            Margin="8"
+                                                                            Command="materialDesign:DialogHost.CloseDialogCommand" Content="Cancelar"/>
+                                                                </StackPanel>
+                                                            </StackPanel>
+                                                        </Button.CommandParameter>
+                                                        <materialDesign:PackIcon Kind="UsersPlus"/>
+                                                    </Button>
+                                                    <materialDesign:PopupBox Style="{StaticResource MaterialDesignToolPopupBox}" Padding="2 0 2 0">
+                                                        <StackPanel>
+                                                            <Button Content="Mostar acciones" Click="ShowActionsBook"/>
+                                                            <Button Content="Baja"/>
+                                                            <Button Content="Editar"/>
+                                                        </StackPanel>
+                                                    </materialDesign:PopupBox>
+                                                </StackPanel>
+                                            </Grid>
+                                        </StackPanel>
+                                    <Grid Grid.Row="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <!--Table-->
+                                        <DataGrid AutoGenerateColumns="False" 
+                                              x:Name="dataGridBook" 
+                                              MaxHeight="400"
+                                              VerticalAlignment="Top" 
+                                              Grid.Row="0" Focusable="False" 
+                                              CanUserAddRows="False" CanUserDeleteRows="False" 
+                                              CanUserReorderColumns="False">
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Binding="{Binding ClientsAmount}" MinWidth="50"  Header="Clientes(#)" IsReadOnly="True" />
+                                                <DataGridTextColumn Binding="{Binding Country}" MinWidth="50"  Header="Pais" IsReadOnly="True" />
+                                                <DataGridTextColumn Binding="{Binding DateIn}" MinWidth="50"  Header="Fecha Entrada" IsReadOnly="True"/>
+                                                <DataGridTextColumn Binding="{Binding DateOut}" MinWidth="50"  Header="Fecha Salida" IsReadOnly="True"/>
+                                                <DataGridTextColumn Binding="{Binding EstimatedPrice, StringFormat=\{0:C\}}" MinWidth="50"  Header="Precio(Estimado)" IsReadOnly="True"/>
+                                                <DataGridTextColumn Binding="{Binding Price, StringFormat=\{0:C\}}" MinWidth="50"  Header="Precio" IsReadOnly="True"/>
+                                                <DataGridTemplateColumn Visibility="Hidden">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <Button Style="{StaticResource MaterialDesignFlatButton}"  Width="35" Margin="0" Padding="0"              
+                                                                            Content="{materialDesign:PackIcon Edit}" ToolTip="Editar"/>
+                                                                <Button Style="{StaticResource MaterialDesignFlatButton}"  Width="35" Margin="0" Padding="0"                  
+                                                                            Content="{materialDesign:PackIcon Delete}" ToolTip="Eliminar"/>
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                            </DataGrid.Columns>
+
+                                        </DataGrid>
+                                        <!--Table Footer-->
+                                        <DataGrid Grid.Row="1" x:Name="datagridFooterBook">
+                                            <DataGrid.Columns >
+                                                <DataGridTextColumn MinWidth="50"/>
+                                                <DataGridTextColumn MinWidth="50" Header="Total"/>
+                                                <DataGridTextColumn MinWidth="50"/>
+                                                <DataGridTextColumn MinWidth="50"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </Grid>
+                                </Grid>
+                                </materialDesign:DialogHost>
+                            <!--</materialDesign:Card>-->
+                        </StackPanel>
+                        <StackPanel x:Name="services" Visibility="Hidden" Grid.Column="0">
+                        <!--    <materialDesign:Card  Margin="10 5 5 5" MaxWidth="500" >-->
+                                <materialDesign:DialogHost DialogClosing="CloseDialog">
+                                    <Grid Margin="18 10 5 5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                        <!--Card Header-->
+                                        <StackPanel Grid.Row="0" Margin="10 8 10 10" HorizontalAlignment="Left">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="350"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel Grid.Column="0" VerticalAlignment="Center" Orientation="Horizontal">
+                                                    <TextBlock FontWeight="Bold" FontSize="16" Padding="0 0 8 0"><Run Text="Servicios"/></TextBlock>
+                                                    <TextBlock Name="monthYearCurrentServices" FontWeight="Light" FontSize="14"><Run Text="Abril/2019"/></TextBlock>
+                                                </StackPanel>
+                                                <StackPanel  Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                                                    <Button Style="{StaticResource MaterialDesignToolButton}" 
+                                                            Width="30" Padding="2 0 2 0"
+                                                            materialDesign:RippleAssist.IsCentered="True" 
+                                                            ToolTip="Adicionar nuevo producto">
+                                                        <materialDesign:PackIcon Kind="Add" />
+                                                    </Button>
+                                                    <Button Style="{StaticResource MaterialDesignToolButton}" 
+                                                    Width="30" Padding="2 0 2 0"
+                                                    materialDesign:RippleAssist.IsCentered="True"
+                                                    ToolTip="Desayuno" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}">
+                                                        <Button.CommandParameter>
+                                                            <StackPanel Margin="16" Name="BreakfastModal">
+                                                                <TextBlock FontWeight="Bold" FontSize="15"><InlineUIContainer>
+                                                                    <materialDesign:PackIcon Kind="Restaurant" />
+                                                                </InlineUIContainer><Run Text=" Nuevo desayuno"/></TextBlock>
+
+                                                                <Grid Margin="10">
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="150"/>
+                                                                        <ColumnDefinition Width="10"/>
+                                                                        <ColumnDefinition Width="150"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Grid.RowDefinitions>
+                                                                        <RowDefinition/>
+                                                                        <RowDefinition/>
+                                                                    </Grid.RowDefinitions>
+
+                                                                    <DatePicker Name="dateBreakfast" 
+                                                                                materialDesign:HintAssist.Hint="Fecha" 
+                                                                                materialDesign:HintAssist.HintOpacity="1"
+                                                                                Grid.Column="0" Grid.Row="0" Margin="3"
+                                                                                Style="{StaticResource MaterialDesignFloatingHintDatePicker}" 
+                                                                                SelectedDateChanged="SelectedDateChanged">
+                                                                        <DatePicker.Text>
+                                                                            <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                                <Binding.ValidationRules>
+                                                                                    <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                                </Binding.ValidationRules>
+                                                                            </Binding>
+                                                                        </DatePicker.Text>
+                                                                    </DatePicker>
+
+                                                                    <TextBox Name="breakfastPrice" 
+                                                                             PreviewTextInput="NumberValidationTextBox"
+                                                                             materialDesign:HintAssist.Hint="Precio" 
+                                                                         materialDesign:HintAssist.HintOpacity="1"
+                                                                         Grid.Column="2" Grid.Row="0" Margin="3"
+                                                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                                                         TextChanged="TextChanged">
+                                                                        <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                            <Binding.ValidationRules>
+                                                                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                                <domain:NumberFloatValidation ValidatesOnTargetUpdated="True" />
+                                                                            </Binding.ValidationRules>
+                                                                        </Binding>
+                                                                    </TextBox>
+
+                                                                    <TextBox Name="breakfastDescription"
+                                                                         materialDesign:HintAssist.Hint="Descripción(breve)" 
+                                                                         materialDesign:HintAssist.HintOpacity="1"
+                                                                         Grid.ColumnSpan="3" Grid.Row="1" Margin="3"
+                                                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                                                         TextChanged="TextChanged">
+                                                                        <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                            <Binding.ValidationRules>
+                                                                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                            </Binding.ValidationRules>
+                                                                        </Binding>
+                                                                    </TextBox>
+                                                                </Grid>
+                                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                                            IsDefault="True"
+                                                                            Margin="0"
+                                                                            Command="materialDesign:DialogHost.CloseDialogCommand" Click="AddServiceBreakfast" Content="Aceptar"/>
+                                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                                            IsCancel="True"
+                                                                            Margin="8"
+                                                                            Command="materialDesign:DialogHost.CloseDialogCommand" Content="Cancelar"/>
+                                                                </StackPanel>
+                                                            </StackPanel>
+                                                        </Button.CommandParameter>
+                                                        <materialDesign:PackIcon Kind="Restaurant" />
+                                                    </Button>
+                                                    <Button Style="{StaticResource MaterialDesignToolButton}" 
+                                                    Width="30" Padding="2 0 2 0"
+                                                    materialDesign:RippleAssist.IsCentered="True"
+                                                    ToolTip="Taxi" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}">
+                                                        <Button.CommandParameter>
+                                                            <StackPanel Margin="16">
+                                                                <TextBlock FontWeight="Bold" FontSize="15"><InlineUIContainer>
+                                                                    <materialDesign:PackIcon Kind="Taxi" />
+                                                                </InlineUIContainer><Run Text=" Nuevo Taxi"/></TextBlock>
+
+                                                                <Grid Margin="10">
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="150"/>
+                                                                        <ColumnDefinition Width="10"/>
+                                                                        <ColumnDefinition Width="150"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Grid.RowDefinitions>
+                                                                        <RowDefinition/>
+                                                                        <RowDefinition/>
+                                                                    </Grid.RowDefinitions>
+
+                                                                    <DatePicker Name="taxiDate" materialDesign:HintAssist.Hint="Fecha" 
+                                                                            materialDesign:HintAssist.HintOpacity="1"
+                                                                            Grid.Column="0" Grid.Row="0" Margin="3"
+                                                                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
+                                                                            SelectedDateChanged="SelectedDateChanged">
+                                                                        <DatePicker.Text>
+                                                                            <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                                <Binding.ValidationRules>
+                                                                                    <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                                </Binding.ValidationRules>
+                                                                            </Binding>
+                                                                        </DatePicker.Text>
+                                                                    </DatePicker>
+
+                                                                    <TextBox Name="taxiPrice" 
+                                                                             PreviewTextInput="NumberValidationTextBox"
+                                                                             materialDesign:HintAssist.Hint="Precio" 
+                                                                             materialDesign:HintAssist.HintOpacity="1"
+                                                                             Grid.Column="2" Grid.Row="0" Margin="3"
+                                                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                                                          TextChanged="TextChanged">
+                                                                        <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                            <Binding.ValidationRules>
+                                                                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                                <domain:NumberFloatValidation ValidatesOnTargetUpdated="True" />
+                                                                            </Binding.ValidationRules>
+                                                                        </Binding>
+                                                                    </TextBox>
+
+                                                                    <TextBox Name="taxiDescription" materialDesign:HintAssist.Hint="Descripción(breve)" 
+                                                                             materialDesign:HintAssist.HintOpacity="1"
+                                                                             Grid.ColumnSpan="3" Grid.Row="1" Margin="3"
+                                                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                                                          TextChanged="TextChanged">
+                                                                        <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                            <Binding.ValidationRules>
+                                                                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                            </Binding.ValidationRules>
+                                                                        </Binding>
+                                                                    </TextBox>
+                                                                </Grid>
+                                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                                        IsDefault="True"
+                                                                        Margin="0"
+                                                                        Command="materialDesign:DialogHost.CloseDialogCommand" 
+                                                                        Click="AddServiceTaxi" Content="Aceptar"/>
+                                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                                        IsCancel="True"
+                                                                        Margin="8"
+                                                                        Command="materialDesign:DialogHost.CloseDialogCommand" Content="Cancelar"/>
+                                                                </StackPanel>
+                                                            </StackPanel>
+                                                        </Button.CommandParameter>
+                                                        <materialDesign:PackIcon Kind="Taxi" />
+                                                    </Button>
+                                                    <Button Style="{StaticResource MaterialDesignToolButton}" 
+                                                    Width="30" Padding="2 0 2 0"
+                                                    materialDesign:RippleAssist.IsCentered="True"
+                                                    ToolTip="Limpieza" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}">
+                                                        <Button.CommandParameter>
+                                                            <StackPanel Margin="16">
+                                                                <TextBlock FontWeight="Bold" FontSize="15"><InlineUIContainer>
+                                                                    <materialDesign:PackIcon Kind="Broom" />
+                                                                </InlineUIContainer><Run Text=" Servicio limpieza"/></TextBlock>
+
+                                                                <Grid Margin="10">
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="150"/>
+                                                                        <ColumnDefinition Width="10"/>
+                                                                        <ColumnDefinition Width="150"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Grid.RowDefinitions>
+                                                                        <RowDefinition/>
+                                                                        <RowDefinition/>
+                                                                        <RowDefinition/>
+                                                                    </Grid.RowDefinitions>
+
+                                                                    <DatePicker Name="cleanDate" materialDesign:HintAssist.Hint="Fecha" 
+                                                                                materialDesign:HintAssist.HintOpacity="1"
+                                                                                Grid.Column="0" Grid.Row="0" Margin="3"
+                                                                                Style="{StaticResource MaterialDesignFloatingHintDatePicker}"  
+                                                                            SelectedDateChanged="SelectedDateChanged">
+                                                                        <DatePicker.Text>
+                                                                            <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                                <Binding.ValidationRules>
+                                                                                    <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                                </Binding.ValidationRules>
+                                                                            </Binding>
+                                                                        </DatePicker.Text>
+                                                                    </DatePicker>
+                                                                    <TextBox Name="cleanPrice" 
+                                                                             PreviewTextInput="NumberValidationTextBox"
+                                                                             materialDesign:HintAssist.Hint="Precio" 
+                                                                         materialDesign:HintAssist.HintOpacity="1"
+                                                                         Grid.Column="2" Grid.Row="0" Margin="3"
+                                                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                                                         TextChanged="TextChanged">
+                                                                        <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                            <Binding.ValidationRules>
+                                                                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                                <domain:NumberFloatValidation ValidatesOnTargetUpdated="True" />
+                                                                            </Binding.ValidationRules>
+                                                                        </Binding>
+                                                                    </TextBox>
+                                                                    <TextBox Name="cleanDescription"
+                                                                    materialDesign:HintAssist.Hint="Descripción(breve)" 
+                                                                         materialDesign:HintAssist.HintOpacity="1"
+                                                                         Grid.ColumnSpan="3" Grid.Row="1" Margin="3"
+                                                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                                                         TextChanged="TextChanged">
+                                                                        <Binding Path="NameTextBox" 
+                                                                                     UpdateSourceTrigger="PropertyChanged"
+                                                                                     Mode="TwoWay">
+                                                                            <Binding.ValidationRules>
+                                                                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" />
+                                                                            </Binding.ValidationRules>
+                                                                        </Binding>
+                                                                    </TextBox>
+                                                                </Grid>
+                                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                                        IsDefault="True"
+                                                                        Margin="0"
+                                                                        Command="materialDesign:DialogHost.CloseDialogCommand" Content="Aceptar"
+                                                                        Click="AddServiceClean"/>
+                                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                                            IsCancel="True"
+                                                                            Margin="8"
+                                                                            Command="materialDesign:DialogHost.CloseDialogCommand" Content="Cancelar"/>
+                                                                </StackPanel>
+                                                            </StackPanel>
+                                                        </Button.CommandParameter>
+                                                        <materialDesign:PackIcon Kind="Broom" />
+                                                    </Button>
+                                                    <materialDesign:PopupBox Style="{StaticResource MaterialDesignToolPopupBox}" Padding="2 0 2 0">
+                                                        <StackPanel>
+                                                            <Button Content="Mostrar acciones" Click="ShowActionsServices"/>
+                                                            <Button Content="Editar"/>
+                                                        </StackPanel>
+                                                    </materialDesign:PopupBox>
+                                                </StackPanel>
+                                            </Grid>
+
+                                        </StackPanel>
+                                        <Grid Grid.Row="1">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <!--Table-->
+                                            <DataGrid AutoGenerateColumns="False" 
+                                              x:Name="dataGridServices" 
+                                              MaxHeight="400"
+                                              VerticalAlignment="Top" 
+                                              Grid.Row="0" Focusable="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Binding="{Binding Type}" MinWidth="50"  Header="Tipo" IsReadOnly="True" />
+                                                <DataGridTextColumn Binding="{Binding Date}" MinWidth="50"  Header="Fecha" IsReadOnly="True"/>
+                                                <DataGridTextColumn Binding="{Binding Description}" MinWidth="50"  Header="Descripción" IsReadOnly="True"/>
+                                                <DataGridTextColumn Binding="{Binding Price, StringFormat=\{0:C\}}" MinWidth="50"  Header="Precio" IsReadOnly="True"/>
+                                                <DataGridTemplateColumn Visibility="Hidden">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <Button Style="{StaticResource MaterialDesignFlatButton}"  Width="35" Margin="0" Padding="0"              
+                                                                        Content="{materialDesign:PackIcon Edit}" ToolTip="Editar"/>
+                                                                <Button Style="{StaticResource MaterialDesignFlatButton}"  Width="35" Margin="0" Padding="0"                  
+                                                                        Content="{materialDesign:PackIcon Delete}" ToolTip="Eliminar"/>
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                            </DataGrid.Columns>
+                                    </DataGrid>
+                                    </Grid>
+                                </Grid>
+                                </materialDesign:DialogHost>
+                            <!--   </materialDesign:Card>-->
+                        </StackPanel>
+                    </Grid>
+                </DockPanel>
+            </DockPanel>
+        </materialDesign:DialogHost>
+    </Grid>
+</Window>
